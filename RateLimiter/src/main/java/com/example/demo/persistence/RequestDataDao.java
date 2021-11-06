@@ -16,24 +16,19 @@ import org.springframework.stereotype.Component;
 import com.example.demo.model.RequestData;
 
 @Component
-public class RequestDataDao implements Dao<RequestData>{
-	
-//	private List<RequestData> requestDataList = new ArrayList<>();
-//	@Autowired
-//	private List<RequestData> requestDataList = new ArrayList<>();
+public class RequestDataDao implements Dao<RequestData> {
+
 	private List<RequestData> requestDataList = new CopyOnWriteArrayList<>();
 
-
-	@Override
-	public Optional<RequestData> get(int id) {
-		return Optional.ofNullable(requestDataList.get(id));
-	}
+//	@Override
+//	public Optional<RequestData> get(int id) {
+//		return Optional.ofNullable(requestDataList.get(id));
+//	}
 
 	@Override
 	public Collection<RequestData> getAll() {
 		return requestDataList.stream().filter(Objects::nonNull)
-				.collect(Collectors.collectingAndThen(Collectors.toList(), 
-						Collections::unmodifiableList));
+				.collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
 	}
 
 	@Override
@@ -44,41 +39,31 @@ public class RequestDataDao implements Dao<RequestData>{
 		return index;
 	}
 
-	@Override
-	public void update(RequestData data) {
-		requestDataList.set(data.getId(), data);
-	}
+//	@Override
+//	public void update(RequestData data) {
+//		requestDataList.set(data.getId(), data);
+//	}
 
-	@Override
-	public void delete(RequestData data) {
-		requestDataList.set(data.getId(), null);
-	}
+//	@Override
+//	public void delete(RequestData data) {
+//		requestDataList.set(data.getId(), null);
+//	}
 
 	@Override
 	public int getRequestCountInWindow(long window, Timestamp timestamp) {
 		int count = 0;
 		Timestamp windowStartTime = Timestamp.from(timestamp.toInstant().minusSeconds(window));
-//		Integer[] arr = requestDataList.stream()
-//				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-//				.toArray(Integer[] :: new);
-//		System.out.println(arr);
-//		count = arr.length;
-//		synchronized(requestDataList) {
-		count = (int) requestDataList.stream()
-				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0).count();
-		System.out.println(count);
-		requestDataList.stream()
-				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-				.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
-		
-//		System.out.println(requestDataList.stream()
-//				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-//				.collect(Collectors.toList()));
+
+		count = (int) requestDataList.stream().filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+				.count();
+//		if(count > 10) {
+//			System.out.println(count);
+////			requestDataList.stream()
+////			.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+////			.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
+////	
 //		}
-//		count = (int) requestDataList.stream()
-//				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-//				.collect(Collectors.toSet()).size();
-		
+
 		return count;
 	}
 }

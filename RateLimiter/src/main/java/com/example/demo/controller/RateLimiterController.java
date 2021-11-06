@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.sql.Timestamp;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,50 +19,26 @@ import com.example.demo.service.RateLimiterService;
 public class RateLimiterController {
 	@Autowired
 	RateLimiterService service;
+
 	@GetMapping("/")
 	public ResponseEntity<String> index() {
 		RequestData data = new RequestData();
-		data.setTimestamp(new Timestamp(System.currentTimeMillis()));
+		if (data.getTimestamp() != null) {
+			System.out.println(data.getTimestamp());
+		}
 		try {
-			if(service.isAllowed(data).get()) {
-//			if(service.isAllowed(data)) {
-				
+			if (service.isAllowed(data).get()) {
 //				System.out.println(service.getAllRequestData());
 				return new ResponseEntity<>("Hello World!", HttpStatus.OK);
 			}
-		} 
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 //		System.out.println(service.getAllRequestData());
 		return new ResponseEntity<>("Rate limit exceeded!", HttpStatus.TOO_MANY_REQUESTS);
 	}
-	
-//	@GetMapping("/byThread")
-//	public ResponseEntity<String> index2() {
-////		CompletableFuture <Boolean> thread1 = service.isAllowed(new RequestData());
-////		CompletableFuture <Boolean> thread2 = service.isAllowed(new RequestData());
-////		CompletableFuture <Boolean> thread3 = service.isAllowed(new RequestData());
-////		CompletableFuture.allOf(thread1,thread2,thread3).join();
-////		return new ResponseEntity<>("Hello World!", HttpStatus.OK);
-//		
-////		RequestData data = new RequestData();
-////		data.setTimestamp(new Timestamp(System.currentTimeMillis()));
-////		try {
-////			if(service.isAllowed(data).get()) {
-////				return new ResponseEntity<>("Hello World!", HttpStatus.OK);
-////			}
-////		} catch (InterruptedException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		} catch (ExecutionException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
-////		return new ResponseEntity<>("Rate limit exceeded!", HttpStatus.TOO_MANY_REQUESTS);
-//	}
 }

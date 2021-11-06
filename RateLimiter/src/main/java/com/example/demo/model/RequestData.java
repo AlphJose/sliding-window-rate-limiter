@@ -12,7 +12,7 @@ public class RequestData {
 		super();
 		this.timestamp = new Timestamp(System.currentTimeMillis());
 	}
-	//interrupt  vannal store
+	//store during interrupt
 	public Timestamp getTimestamp() {
 		return timestamp;
 	}
