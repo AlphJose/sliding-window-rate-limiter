@@ -31,5 +31,9 @@ public class RequestData {
 	public void setId(int id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return "RequestData [id=" + id + ", timestamp=" + timestamp + ", counter=" + counter + "]";
+	}
 	
 }

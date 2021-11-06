@@ -21,7 +21,7 @@ public class RateLimiterService {
     private RequestData requestData = new RequestData();
     private static AtomicInteger counter = new AtomicInteger();
     private final int limit = 10;
-    private final long timeWindowInSec = 60;
+    private final long timeWindowInSec = 2;
 
     public void save() {
         requestDataDao.save(requestData);
@@ -46,30 +46,34 @@ public class RateLimiterService {
         return requestData;
     }
     
-    public boolean isAllowed(RequestData data) {
-    	
-    	int count = requestDataDao.getRequestCountInWindow(timeWindowInSec, data.getTimestamp());
-    	counter.set(count);
-    	if(counter.incrementAndGet() > limit) {
-    		System.out.println("Counter = " + counter);
-    		return false;
-    	}
-    	System.out.println("Counter = " + counter);
-    	data.setCounter(counter);
-    	requestDataDao.save(data);
-    	return true;
-    }
-    
-//    @Async
-//    public CompletableFuture<Boolean>  isAllowed(RequestData data) {
+//    public boolean isAllowed(RequestData data) {
+//    	
+//    	int count = requestDataDao.getRequestCountInWindow(timeWindowInSec, data.getTimestamp());
+//    	counter.set(count);
 //    	if(counter.incrementAndGet() > limit) {
 //    		System.out.println("Counter = " + counter);
-//    		return CompletableFuture.completedFuture(Boolean.FALSE);
+//    		return false;
 //    	}
 //    	System.out.println("Counter = " + counter);
 //    	data.setCounter(counter);
 //    	requestDataDao.save(data);
-//    	return CompletableFuture.completedFuture(Boolean.TRUE);
+//    	return true;
 //    }
+    
+    @Async
+    public CompletableFuture<Boolean>  isAllowed(RequestData data) {
+    	int count = requestDataDao.getRequestCountInWindow(timeWindowInSec, data.getTimestamp());
+    	counter.set(count);
+
+    	if(counter.incrementAndGet() > limit) {
+//    		System.out.println("Counter = " + counter);
+    		return CompletableFuture.completedFuture(Boolean.FALSE);
+    	}
+//    	System.out.println("Counter = " + counter);
+//    	System.out.println(data.toString());
+//    	data.setCounter(counter);
+    	requestDataDao.save(data);
+    	return CompletableFuture.completedFuture(Boolean.TRUE);
+    }
 	
 }

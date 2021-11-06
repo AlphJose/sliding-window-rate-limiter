@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ public class RequestDataDao implements Dao<RequestData>{
 	
 //	private List<RequestData> requestDataList = new ArrayList<>();
 //	@Autowired
-	private List<RequestData> requestDataList = new ArrayList<>();
+//	private List<RequestData> requestDataList = new ArrayList<>();
+	private List<RequestData> requestDataList = new CopyOnWriteArrayList<>();
+
 
 	@Override
 	public Optional<RequestData> get(int id) {
@@ -60,8 +63,22 @@ public class RequestDataDao implements Dao<RequestData>{
 //				.toArray(Integer[] :: new);
 //		System.out.println(arr);
 //		count = arr.length;
+//		synchronized(requestDataList) {
 		count = (int) requestDataList.stream()
-		.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0).count();
+				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0).count();
+		System.out.println(count);
+		requestDataList.stream()
+				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+				.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
+		
+//		System.out.println(requestDataList.stream()
+//				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+//				.collect(Collectors.toList()));
+//		}
+//		count = (int) requestDataList.stream()
+//				.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+//				.collect(Collectors.toSet()).size();
+		
 		return count;
 	}
 }

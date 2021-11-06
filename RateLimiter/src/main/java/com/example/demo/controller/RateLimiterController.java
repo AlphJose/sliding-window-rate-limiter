@@ -25,20 +25,22 @@ public class RateLimiterController {
 	public ResponseEntity<String> index() {
 		RequestData data = new RequestData();
 		data.setTimestamp(new Timestamp(System.currentTimeMillis()));
-//		try {
-//			if(service.isAllowed(data).get()) {
-			if(service.isAllowed(data)) {
-
+		try {
+			if(service.isAllowed(data).get()) {
+//			if(service.isAllowed(data)) {
+				
+//				System.out.println(service.getAllRequestData());
 				return new ResponseEntity<>("Hello World!", HttpStatus.OK);
 			}
-//		} 
-//		catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		} 
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		System.out.println(service.getAllRequestData());
 		return new ResponseEntity<>("Rate limit exceeded!", HttpStatus.TOO_MANY_REQUESTS);
 	}
 	
