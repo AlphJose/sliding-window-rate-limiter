@@ -23,9 +23,6 @@ public class RateLimiterController {
 	@GetMapping("/")
 	public ResponseEntity<String> index() {
 		RequestData data = new RequestData();
-		if (data.getTimestamp() != null) {
-			System.out.println(data.getTimestamp());
-		}
 		try {
 			if (service.isAllowed(data).get()) {
 //				System.out.println(service.getAllRequestData());

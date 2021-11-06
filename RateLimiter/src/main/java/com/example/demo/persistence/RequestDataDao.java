@@ -20,11 +20,6 @@ public class RequestDataDao implements Dao<RequestData> {
 
 	private List<RequestData> requestDataList = new CopyOnWriteArrayList<>();
 
-//	@Override
-//	public Optional<RequestData> get(int id) {
-//		return Optional.ofNullable(requestDataList.get(id));
-//	}
-
 	@Override
 	public Collection<RequestData> getAll() {
 		return requestDataList.stream().filter(Objects::nonNull)
@@ -39,31 +34,46 @@ public class RequestDataDao implements Dao<RequestData> {
 		return index;
 	}
 
-//	@Override
-//	public void update(RequestData data) {
-//		requestDataList.set(data.getId(), data);
-//	}
-
-//	@Override
-//	public void delete(RequestData data) {
-//		requestDataList.set(data.getId(), null);
-//	}
-
 	@Override
 	public int getRequestCountInWindow(long window, Timestamp timestamp) {
 		int count = 0;
 		Timestamp windowStartTime = Timestamp.from(timestamp.toInstant().minusSeconds(window));
+		evictOldRequests(windowStartTime);
+		count = requestDataList.size();
+//		if(count >= 10) {
+//			System.out.println(count);
+//			requestDataList
+//			.forEach(data -> System.out.println(data 
+//					+ " windowStartTime = " + windowStartTime 
+//					+ " new timestamp = " + timestamp));
+//		}
+		
 
-		count = (int) requestDataList.stream().filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-				.count();
+//		count = (int) requestDataList.stream().filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+//				.count();
 //		if(count > 10) {
 //			System.out.println(count);
-////			requestDataList.stream()
-////			.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
-////			.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
-////	
+//			requestDataList.stream()
+//			.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
+//			.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
 //		}
 
 		return count;
 	}
+
+	/*
+	 * Removes requests before the window's start time. Ignoring the case where
+	 * requests are still processing as of now.
+	 */
+	private void evictOldRequests(Timestamp windowStartTime) {
+		requestDataList.removeIf(data -> (data.getTimestamp().compareTo(windowStartTime) < 0));
+	}
+
+	/*
+	 * In case of a server interrupt/unexpected shut down, the counter and requestDataList needs to be stored and retrieved upon server restart*/
+	@Override
+	public void saveToFile() {
+		
+	}
+	
 }

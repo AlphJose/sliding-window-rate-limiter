@@ -17,33 +17,13 @@ import com.example.demo.persistence.Dao;
 public class RateLimiterService {
 	@Autowired
 	private Dao<RequestData> requestDataDao;
-//	private RequestData requestData = new RequestData();
 	private static AtomicInteger counter = new AtomicInteger();
-	private final int limit = 10;
-	private final long timeWindowInSec = 2;
-
-//	public void save() {
-//		requestDataDao.save(requestData);
-//		requestData = new RequestData();
-//	}
+	private final int limit = 20;
+	private final long timeWindowInSec = 60;
 
 	public Collection<RequestData> getAllRequestData() {
 		return requestDataDao.getAll();
 	}
-
-//	public void saveRequestData(RequestData data) {
-//		validate(data);
-////        return requestDataDao.save(data);
-//		requestDataDao.save(data);
-//	}
-
-//	private void validate(RequestData data) {
-//		// Details omitted
-//	}
-
-//	public RequestData getRequestData() {
-//		return requestData;
-//	}
 
 	@Async
 	public CompletableFuture<Boolean> isAllowed(RequestData data) {
