@@ -32,4 +32,10 @@ public class RateLimiterApplication {
 	429 
  *
  *
+ *TODO
+ *1. convert to epoch
+ *2. store in seconds - track counter for each second, 
+ *		justification - what if limit is a million per minute? it can be brought down to 60 entries
+ *3. unit test
+ *
  * */

@@ -19,7 +19,7 @@ public class RateLimiterService {
 	private Dao<RequestData> requestDataDao;
 	private static AtomicInteger counter = new AtomicInteger();
 	private final int limit = 20;
-	private final long timeWindowInSec = 2;
+	private final long timeWindowInSec = 60;
 
 	public Collection<RequestData> getAllRequestData() {
 		return requestDataDao.getAll();
