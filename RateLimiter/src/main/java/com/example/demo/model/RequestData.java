@@ -1,25 +1,25 @@
 package com.example.demo.model;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RequestData {
 	private int id;
-	private Timestamp timestamp;
+	private long epochTimestamp;
 	private AtomicInteger counter;
 
 	public RequestData() {
 		super();
-		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.epochTimestamp = Instant.now().getEpochSecond();
 	}
 
 	// store during interrupt
-	public Timestamp getTimestamp() {
-		return timestamp;
+	public long getTimestamp() {
+		return epochTimestamp;
 	}
 
-	public void setTimestamp(Timestamp timestamp) {
-		this.timestamp = timestamp;
+	public void setTimestamp(long timestamp) {
+		this.epochTimestamp = timestamp;
 	}
 
 	public AtomicInteger getCounter() {
@@ -40,7 +40,7 @@ public class RequestData {
 
 	@Override
 	public String toString() {
-		return "RequestData [id=" + id + ", timestamp=" + timestamp + ", counter=" + counter + "]";
+		return "RequestData [id=" + id + ", timestamp=" + epochTimestamp + ", counter=" + counter + "]";
 	}
 
 }

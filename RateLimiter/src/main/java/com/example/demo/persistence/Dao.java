@@ -1,8 +1,6 @@
 package com.example.demo.persistence;
 
-import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Optional;
 
 public interface Dao<T> {
 
@@ -10,7 +8,7 @@ public interface Dao<T> {
 
 	int save(T t);
 
-	int getRequestCountInWindow(long window, Timestamp timestamp);
+	int getRequestCountInWindow(long window, long l);
 	
 	void saveToFile();
 }
