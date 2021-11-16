@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +45,33 @@ public class RequestDataDao implements Dao<RequestData> {
 
 	@Override
 	public int save(RequestData data) {
-		requestDataList.add(data);
 		int index = requestDataList.size() - 1;
-		data.setId(index);
+//		if(index == -1) {
+//			data.setCounter(new AtomicInteger(1));
+//			requestDataList.add(data);
+//			index ++;
+//			data.setId(index);
+//			return index;
+//		}
+//		System.out.println(requestDataList.get(index));
+//		System.out.println(requestDataList.get(index).getTimestamp());
+//		System.out.println(data.getTimestamp());
+		if(index >= 0 && requestDataList.get(index).getTimestamp() == data.getTimestamp()) {
+			requestDataList.get(index).getCounter().incrementAndGet();
+		} else {
+			data.setCounter(new AtomicInteger(1));
+			requestDataList.add(data);
+			index ++;
+			data.setId(index);
+		}
 		return index;
 	}
 
 	@Override
-	public int getRequestCountInWindow(long window, Timestamp timestamp) {
+	public int getRequestCountInWindow(long window, long timestamp) {
 		int count = 0;
-		Timestamp windowStartTime = Timestamp.from(timestamp.toInstant().minusSeconds(window));
+//		Timestamp windowStartTime = Timestamp.from(timestamp.toInstant().minusSeconds(window));
+		long windowStartTime = timestamp - window;
 		evictOldRequests(windowStartTime);
 		count = requestDataList.size();
 //		if(count >= 10) {
@@ -80,10 +98,12 @@ public class RequestDataDao implements Dao<RequestData> {
 	 * Removes requests before the window's start time. Ignoring the case where
 	 * requests are still processing as of now.
 	 */
-	private void evictOldRequests(Timestamp windowStartTime) {
-		requestDataList.removeIf(data -> (data.getTimestamp().compareTo(windowStartTime) < 0));
-//		saveToFile();
-//		getListFromFile();
+	private void evictOldRequests(long windowStartTime) {
+//		requestDataList.removeIf(data -> (data.getTimestamp().compareTo(windowStartTime) < 0));
+		requestDataList.removeIf(data -> (data.getTimestamp() < windowStartTime));
+
+		saveToFile();
+		getListFromFile();
 	}
 
 	/*
@@ -123,7 +143,7 @@ public class RequestDataDao implements Dao<RequestData> {
 				}.getType());
 //		System.out.println(requestDataList1.containsAll(requestDataList));
 //		requestDataList1.removeAll(requestDataList);
-//		System.out.println(requestDataList);
+		System.out.println(requestDataList);
 //		System.out.println(requestDataList1);
 	}
 

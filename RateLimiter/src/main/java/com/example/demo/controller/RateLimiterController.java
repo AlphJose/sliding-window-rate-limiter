@@ -35,7 +35,7 @@ public class RateLimiterController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		System.out.println(service.getAllRequestData());
+		System.out.println(service.getAllRequestData());
 		return new ResponseEntity<>("Rate limit exceeded!", HttpStatus.TOO_MANY_REQUESTS);
 	}
 }
