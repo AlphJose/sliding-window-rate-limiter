@@ -49,8 +49,6 @@ public class RequestDataDao implements Dao<RequestData> {
 		int count = 0;
 		long windowStartTime = timestamp - window;
 		evictOldRequests(windowStartTime);
-		int temp = requestDataList.size();
-
 		for (int i = 0; i < requestDataList.size(); i++) {
 			count += requestDataList.get(i).getCounter().get();
 		}

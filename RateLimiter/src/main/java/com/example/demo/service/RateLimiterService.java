@@ -32,7 +32,6 @@ public class RateLimiterService {
 		if (counter.incrementAndGet() > limit) {
 			return CompletableFuture.completedFuture(Boolean.FALSE);
 		}
-		System.out.println(requestDataDao.getAll());
 		requestDataDao.save(data);
 		return CompletableFuture.completedFuture(Boolean.TRUE);
 	}
