@@ -22,9 +22,8 @@ From project root directory run:
 
 Running with Docker & docker-compose
 Prerequisites
-
-    docker
-    docker-compose
+1. docker : https://docs.docker.com/engine/install/ 
+2. docker-compose : https://docs.docker.com/compose/install/ 
 
 Instructions
 
