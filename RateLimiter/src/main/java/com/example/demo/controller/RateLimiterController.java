@@ -22,12 +22,9 @@ public class RateLimiterController {
 
 	@GetMapping("/")
 	public ResponseEntity<String> index() {
-		String test1 = "123";
-		String test2 = "122.16.32.23";
 		RequestData data = new RequestData();
 		try {
 			if (service.isAllowed(data).get()) {
-//				System.out.println(service.getAllRequestData());
 				return new ResponseEntity<>("Hello World!", HttpStatus.OK);
 			}
 		} catch (InterruptedException e) {
@@ -37,7 +34,6 @@ public class RateLimiterController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		System.out.println(service.getAllRequestData());
 		return new ResponseEntity<>("Rate limit exceeded!", HttpStatus.TOO_MANY_REQUESTS);
 	}
 }

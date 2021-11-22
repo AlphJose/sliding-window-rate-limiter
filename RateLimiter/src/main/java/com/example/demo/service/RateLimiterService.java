@@ -29,22 +29,11 @@ public class RateLimiterService {
 	public CompletableFuture<Boolean> isAllowed(RequestData data) {
 		int count = requestDataDao.getRequestCountInWindow(timeWindowInSec, data.getTimestamp());
 		counter.set(count);
-
 		if (counter.incrementAndGet() > limit) {
-//    		System.out.println("Counter = " + counter);
 			return CompletableFuture.completedFuture(Boolean.FALSE);
 		}
-//    	System.out.println("Counter = " + counter);
-//    	System.out.println(data.toString());
 		System.out.println(requestDataDao.getAll());
 		requestDataDao.save(data);
 		return CompletableFuture.completedFuture(Boolean.TRUE);
 	}
-
 }
-
-
-/**
- * 1. config 
- * 
- * */
