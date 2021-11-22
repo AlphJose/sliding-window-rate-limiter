@@ -18,8 +18,8 @@ public class RateLimiterService {
 	@Autowired
 	private Dao<RequestData> requestDataDao;
 	private static AtomicInteger counter = new AtomicInteger();
-	private final int limit = 20;
-	private final long timeWindowInSec = 60;
+	public final int limit = 20;
+	public final long timeWindowInSec = 60;
 
 	public Collection<RequestData> getAllRequestData() {
 		return requestDataDao.getAll();
@@ -36,8 +36,15 @@ public class RateLimiterService {
 		}
 //    	System.out.println("Counter = " + counter);
 //    	System.out.println(data.toString());
+		System.out.println(requestDataDao.getAll());
 		requestDataDao.save(data);
 		return CompletableFuture.completedFuture(Boolean.TRUE);
 	}
 
 }
+
+
+/**
+ * 1. config 
+ * 
+ * */

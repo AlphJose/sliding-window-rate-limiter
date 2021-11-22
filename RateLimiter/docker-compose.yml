@@ -1,0 +1,8 @@
+version: '3.1'
+
+services:
+  sliding-window-rate-limiter:
+    build: .
+    image: sliding-window-rate-limiter
+    ports:
+      - 8080:8080
