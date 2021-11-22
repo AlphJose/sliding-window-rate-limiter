@@ -34,8 +34,53 @@ public class RateLimiterApplication {
  *
  *TODO
  *1. convert to epoch - done
- *2. store in seconds - track counter for each second, 
+ *2. store in seconds - track counter for each second, - done
  *		justification - what if limit is a million per minute? it can be brought down to 60 entries
- *3. unit test
+ *3. integration test and load testing 
+ *4. figure out interrupts
+ *5. savefile causing NPE.
+ *6. readme
+ *7. arraylist -> queue, can pop 1st request as long as outside window, you have info on incoming request's time as well
+ *		keep a var aside to track counter
+ *8. use case where user data is needed
+ *9. use case to scale to like a million requests limit per month
+ *10. go thru justification for completeable future
+ *
+ *
+ *
+ *
+ *
+ *
+ *docker compose
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  *
  * */

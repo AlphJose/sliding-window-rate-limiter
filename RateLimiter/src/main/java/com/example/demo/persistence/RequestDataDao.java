@@ -1,40 +1,27 @@
 package com.example.demo.persistence;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.model.RequestData;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 @Component
 public class RequestDataDao implements Dao<RequestData> {
 
-	private List<RequestData> requestDataList = new CopyOnWriteArrayList<>();
+	private List<RequestData> requestDataList = new CopyOnWriteArrayList<>(); //make static?
 	private static Path path = Paths.get("requestDataStore.txt");
 
 	@Override
@@ -62,7 +49,7 @@ public class RequestDataDao implements Dao<RequestData> {
 			data.setCounter(new AtomicInteger(1));
 			requestDataList.add(data);
 			index ++;
-			data.setId(index);
+			data.setId(index); //need better logic
 		}
 		return index;
 	}
@@ -73,7 +60,12 @@ public class RequestDataDao implements Dao<RequestData> {
 //		Timestamp windowStartTime = Timestamp.from(timestamp.toInstant().minusSeconds(window));
 		long windowStartTime = timestamp - window;
 		evictOldRequests(windowStartTime);
-		count = requestDataList.size();
+		int temp = requestDataList.size();
+		
+		for(int i = 0; i < requestDataList.size(); i++) {
+			count += requestDataList.get(i).getCounter().get();
+		}
+		
 //		if(count >= 10) {
 //			System.out.println(count);
 //			requestDataList
@@ -90,7 +82,7 @@ public class RequestDataDao implements Dao<RequestData> {
 //			.filter(data -> data.getTimestamp().compareTo(windowStartTime) >= 0)
 //			.forEach(data -> System.out.println(data + " windowStartTime = " + windowStartTime + " new timestamp = " + timestamp));
 //		}
-
+		
 		return count;
 	}
 
@@ -102,8 +94,8 @@ public class RequestDataDao implements Dao<RequestData> {
 //		requestDataList.removeIf(data -> (data.getTimestamp().compareTo(windowStartTime) < 0));
 		requestDataList.removeIf(data -> (data.getTimestamp() < windowStartTime));
 
-		saveToFile();
-		getListFromFile();
+//		saveToFile();
+//		getListFromFile();
 	}
 
 	/*
@@ -141,6 +133,7 @@ public class RequestDataDao implements Dao<RequestData> {
 		requestDataList = new Gson().fromJson(json,
 				new TypeToken<CopyOnWriteArrayList<RequestData>>() {
 				}.getType());
+		//TODO : saving to this arraylist is causing arraylist to be null. prevent that.
 //		System.out.println(requestDataList1.containsAll(requestDataList));
 //		requestDataList1.removeAll(requestDataList);
 		System.out.println(requestDataList);
@@ -148,3 +141,7 @@ public class RequestDataDao implements Dao<RequestData> {
 	}
 
 }
+
+
+
+
