@@ -16,9 +16,9 @@ The route is configured to / of the server.
 The default value for APP_PORT is 8080. It can be overridden by setting environment variable APP_PORT to the required port. Make requests to this API to get the count of request received in the server in last 60 seconds.
 
 How to Test
-From project root directory run:
 
-    mvn clean test
+1. From project root directory run :  mvn clean test
+2. Vegeta load testing (https://github.com/tsenart/vegeta) : echo "GET http://localhost:8080/" | vegeta attack -duration=5s -rate=2000 | tee results.bin | vegeta report
 
 Running with Docker & docker-compose
 Prerequisites
