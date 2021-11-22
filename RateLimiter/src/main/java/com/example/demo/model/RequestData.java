@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RequestData {
-	private int id; //not very important 
+	private int id; 
 	private long epochTimestamp;
 	private AtomicInteger counter;
 
@@ -13,7 +13,6 @@ public class RequestData {
 		this.epochTimestamp = Instant.now().getEpochSecond();
 	}
 
-	// store during interrupt
 	public long getTimestamp() {
 		return epochTimestamp;
 	}

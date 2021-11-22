@@ -7,7 +7,7 @@ public interface Dao<T> {
 
 	int save(T t);
 
-	int getRequestCountInWindow(long window, long l);
+	int getRequestCountInWindow(long window, long time);
 	
 	void saveToFile();
 }
