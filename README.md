@@ -17,8 +17,12 @@ The default value for APP_PORT is 8080. It can be overridden by setting environm
 
 How to Test
 
-1. From project root directory run :  mvn clean test
-2. Vegeta load testing (https://github.com/tsenart/vegeta) : echo "GET http://localhost:8080/" | vegeta attack -duration=5s -rate=2000 | tee results.bin | vegeta report
+1.From project root directory run : 
+
+    mvn clean test
+2.Vegeta load testing (https://github.com/tsenart/vegeta) : 
+
+    echo "GET http://localhost:8080/" | vegeta attack -duration=5s -rate=2000 | tee results.bin | vegeta report
 
 Running with Docker & docker-compose
 Prerequisites
